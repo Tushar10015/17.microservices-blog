@@ -1,0 +1,28 @@
+# Laravel & PHP
+/vendor
+/node_modules
+.env
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+/public/storage
+/storage/*.key
+/storage/app/public
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/logs/*
+
+# Docker & OS
+*.log
+*.pid
+*.sock
+*.DS_Store
+docker-compose.override.yml
+
+# IDEs
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace

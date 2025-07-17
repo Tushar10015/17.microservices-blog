@@ -1,0 +1,140 @@
+version: '3.8'
+
+services:
+  # API Gateway (Livewire frontend)
+  api-gateway:
+    build:
+      context: ./api-gateway
+    volumes:
+      - ./api-gateway:/var/www/html
+    container_name: api-gateway
+    ports:
+      - "8080:80"
+    depends_on:
+      - auth-service
+      - post-service
+      - comment-service
+      - notification-service
+    networks:
+      - blog-net
+
+  auth-service:
+    build:
+      context: ./auth-service
+    volumes:
+      - ./auth-service:/var/www/html
+    container_name: auth-service
+    ports:
+      - "8001:80"
+    environment:
+      DB_HOST: auth-mysql
+      DB_PORT: 3306
+      DB_DATABASE: auth
+      DB_USERNAME: root
+      DB_PASSWORD: root
+    depends_on:
+      - auth-mysql
+      - redis
+    networks:
+      - blog-net
+
+  auth-mysql:
+    image: mysql:8
+    container_name: auth-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: auth
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "33061:3306"
+    networks:
+      - blog-net
+
+  post-service:
+    build:
+      context: ./post-service
+    volumes:
+      - ./post-service:/var/www/html
+    container_name: post-service
+    ports:
+      - "8002:80"
+    environment:
+      DB_HOST: post-mysql
+      DB_PORT: 3306
+      DB_DATABASE: post
+      DB_USERNAME: root
+      DB_PASSWORD: root
+    depends_on:
+      - post-mysql
+      - redis
+    networks:
+      - blog-net
+
+  post-mysql:
+    image: mysql:8
+    container_name: post-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: post
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "33062:3306"
+    networks:
+      - blog-net
+
+  comment-service:
+    build:
+      context: ./comment-service
+    volumes:
+      - ./comment-service:/var/www/html
+    container_name: comment-service
+    ports:
+      - "8003:80"
+    environment:
+      DB_HOST: comment-mysql
+      DB_PORT: 3306
+      DB_DATABASE: comment
+      DB_USERNAME: root
+      DB_PASSWORD: root
+    depends_on:
+      - comment-mysql
+      - redis
+    networks:
+      - blog-net
+
+  comment-mysql:
+    image: mysql:8
+    container_name: comment-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: comment
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "33063:3306"
+    networks:
+      - blog-net
+
+  notification-service:
+    build:
+      context: ./notification-service
+    volumes:
+      - ./notification-service:/var/www/html
+    container_name: notification-service
+    ports:
+      - "8004:80"
+    depends_on:
+      - redis
+    networks:
+      - blog-net
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - blog-net
+
+networks:
+  blog-net:
+    driver: bridge
