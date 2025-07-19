@@ -13,6 +13,10 @@ RUN apt-get update && apt-get install -y \
     git \
     && docker-php-ext-install pdo_mysql zip
 
+# Install Node.js + npm
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
+
 RUN composer install
 
 EXPOSE 80
