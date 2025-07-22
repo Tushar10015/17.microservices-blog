@@ -15,7 +15,8 @@ RUN apt-get update && apt-get install -y \
 
 RUN composer install
 
-RUN chmod +x start.sh
+COPY start.sh ./start.sh
+RUN chmod +x ./start.sh
 
 EXPOSE 80
 
