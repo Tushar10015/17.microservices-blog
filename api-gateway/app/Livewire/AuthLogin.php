@@ -14,9 +14,6 @@ class AuthLogin extends Component
 
     public function login()
     {
-        dd('Method called');
-
-
         $this->validate([
             'email' => 'required|email',
             'password' => 'required',

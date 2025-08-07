@@ -1,12 +1,10 @@
-@extends('components.layouts.app')
-@section('content')
 <div class="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
     @if (session()->has('message'))
-        <div class="mb-4 p-4 bg-green-100 text-green-700 rounded">
-            {{ session('message') }}
-        </div>
+    <div class="mb-4 p-4 bg-green-100 text-green-700 rounded">
+        {{ session('message') }}
+    </div>
     @endif
-    
+
     <form wire:submit.prevent="login">
         @csrf
         <h2 class="text-xl font-bold mb-4">Login</h2>
@@ -34,4 +32,3 @@
         </button>
     </form>
 </div>
-@endsection

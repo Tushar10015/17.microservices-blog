@@ -15,6 +15,7 @@ class AuthRegister extends Component
 
     public function register()
     {
+
         $this->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',

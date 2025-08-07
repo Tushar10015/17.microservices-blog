@@ -1,5 +1,3 @@
-@extends('components.layouts.app')
-@section('content')
 <div class="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
     <form wire:submit.prevent="register">
         <h2 class="text-xl font-bold mb-4">Register</h2>
@@ -38,4 +36,3 @@
         </button>
     </form>
 </div>
-@endsection
