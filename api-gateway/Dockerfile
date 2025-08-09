@@ -19,7 +19,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
 
 RUN composer install
 
-RUN npm install
+RUN npm install && npm run build
 
 
 EXPOSE 80
