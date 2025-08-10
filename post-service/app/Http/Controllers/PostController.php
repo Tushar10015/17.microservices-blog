@@ -26,10 +26,15 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'user_id' => 'required|exists:users,id'
         ]);
 
-        $post = Post::create($request->all());
+        $user = $request->get('auth_user'); // Data from auth-service
+
+        $post = Post::create([
+            'title' => $request->title,
+            'content' => $request->content,
+            'user_id' => $user['id'],
+        ]);
 
         return response()->json($post, 201);
     }
@@ -45,6 +50,7 @@ class PostController extends Controller
             'title' => 'sometimes|required|string|max:255',
             'content' => 'sometimes|required|string',
         ]);
+
 
         $post->update($request->only(['title', 'content']));
 
