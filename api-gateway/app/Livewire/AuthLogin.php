@@ -28,8 +28,8 @@ class AuthLogin extends Component
 
         if ($response->successful()) {
             session()->flash('message', 'Login successful!');
-            // You might want to store the token in the session or a cookie here
-            // session(['auth_token' => $response['token']]);
+            session(['token' => $response->json('token')]);
+            return redirect('/posts');
         } else {
             $this->addError('email', 'Invalid credentials');
             Log::error('Login failed for email: ' . $this->email);

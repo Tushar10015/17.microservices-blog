@@ -8,7 +8,7 @@
                 A simple blog application built with Laravel and Livewire.
             </p>
         </div>
-        
+
         @livewire('auth-tabs')
     </div>
 </div>
