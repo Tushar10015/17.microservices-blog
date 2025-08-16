@@ -21,6 +21,7 @@ services:
       context: ./auth-service
     volumes:
       - ./auth-service:/var/www/html
+      - db_data:/var/lib/mysql
     container_name: auth-service
     ports:
       - "8001:80"
@@ -53,6 +54,7 @@ services:
       context: ./post-service
     volumes:
       - ./post-service:/var/www/html
+      - db_data:/var/lib/mysql
     container_name: post-service
     ports:
       - "8002:80"
@@ -85,6 +87,7 @@ services:
       context: ./comment-service
     volumes:
       - ./comment-service:/var/www/html
+      - db_data:/var/lib/mysql
     container_name: comment-service
     ports:
       - "8003:80"
@@ -136,3 +139,8 @@ services:
 networks:
   blog-net:
     driver: bridge
+
+volumes:
+  db_data:
+
+

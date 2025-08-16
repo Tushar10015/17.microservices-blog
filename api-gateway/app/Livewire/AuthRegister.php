@@ -32,6 +32,8 @@ class AuthRegister extends Component
         if ($response->successful()) {
             $this->reset(['name', 'email', 'password', 'password_confirmation']);
             $this->message = 'Registration successful! Please login.';
+            session(['token' => $response->json('token')]);
+            return redirect('/posts');
         } else {
             $errors = $response->json('errors') ?? ['email' => ['Registration failed']];
             foreach ($errors as $field => $messages) {
