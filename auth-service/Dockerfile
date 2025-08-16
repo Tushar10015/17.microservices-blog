@@ -20,5 +20,5 @@ RUN chmod +x ./start.sh
 
 EXPOSE 80
 
-#CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=80"]
-CMD ["./start.sh"]
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=80"]
+#CMD ["./start.sh"]

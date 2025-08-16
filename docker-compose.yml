@@ -21,7 +21,6 @@ services:
       context: ./auth-service
     volumes:
       - ./auth-service:/var/www/html
-      - db_data:/var/lib/mysql
     container_name: auth-service
     ports:
       - "8001:80"
@@ -46,6 +45,8 @@ services:
       MYSQL_ROOT_PASSWORD: root
     ports:
       - "33061:3306"
+    volumes:
+      - auth_db_data:/var/lib/mysql
     networks:
       - blog-net
 
@@ -54,7 +55,6 @@ services:
       context: ./post-service
     volumes:
       - ./post-service:/var/www/html
-      - db_data:/var/lib/mysql
     container_name: post-service
     ports:
       - "8002:80"
@@ -79,6 +79,8 @@ services:
       MYSQL_ROOT_PASSWORD: root
     ports:
       - "33062:3306"
+    volumes:
+      - post_db_data:/var/lib/mysql
     networks:
       - blog-net
 
@@ -87,7 +89,6 @@ services:
       context: ./comment-service
     volumes:
       - ./comment-service:/var/www/html
-      - db_data:/var/lib/mysql
     container_name: comment-service
     ports:
       - "8003:80"
@@ -112,6 +113,8 @@ services:
       MYSQL_ROOT_PASSWORD: root
     ports:
       - "33063:3306"
+    volumes:
+      - comment_db_data:/var/lib/mysql
     networks:
       - blog-net
 
@@ -141,6 +144,8 @@ networks:
     driver: bridge
 
 volumes:
-  db_data:
+  auth_db_data:
+  post_db_data:
+  comment_db_data:
 
 

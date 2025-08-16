@@ -2,11 +2,11 @@
     <form wire:submit.prevent="register">
         <h2 class="text-xl font-bold mb-4">Register</h2>
 
-        @isset($message)
+        @if (!empty($message))
         <div class="mb-4 p-2 bg-green-100 text-green-700 rounded">
             {{ $message }}
         </div>
-        @endisset
+        @endif
 
         <div class="mb-4">
             <label>Name</label>

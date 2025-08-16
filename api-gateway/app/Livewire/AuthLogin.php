@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Log;
 
 class AuthLogin extends Component
 {
-    public $email = '';
-    public $password = '';
+    public $email = 'tushar@example.com';
+    public $password = 'password';
     public $message = '';
 
     public function login()
@@ -27,11 +27,11 @@ class AuthLogin extends Component
         ]);
 
         if ($response->successful()) {
-            session()->flash('message', 'Login successful!');
+            $this->message = 'Login successful!';
             session(['token' => $response->json('token')]);
             return redirect('/posts');
         } else {
-            $this->addError('email', 'Invalid credentials');
+            $this->message = 'Invalid credentials';
             Log::error('Login failed for email: ' . $this->email);
         }
     }

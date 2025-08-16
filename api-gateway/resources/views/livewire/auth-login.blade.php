@@ -1,19 +1,13 @@
 <div class="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
-    @if (session()->has('message'))
-    <div class="mb-4 p-4 bg-green-100 text-green-700 rounded">
-        {{ session('message') }}
-    </div>
-    @endif
-
     <form wire:submit.prevent="login">
         @csrf
         <h2 class="text-xl font-bold mb-4">Login</h2>
 
-        @isset($message)
+        @if (!empty($message))
         <div class="mb-4 p-2 bg-green-100 text-green-700 rounded">
             {{ $message }}
         </div>
-        @endisset
+        @endif
 
         <div class="mb-4">
             <label>Email</label>

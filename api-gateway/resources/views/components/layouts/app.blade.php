@@ -11,6 +11,11 @@
 
 <body>
     <div class="container">
+        @if (session()->has('token'))
+        <div class="fixed right-0 top-0 m-4">
+            <livewire:logout-button />
+        </div>
+        @endif
         @yield('content')
     </div>
     @livewireScripts

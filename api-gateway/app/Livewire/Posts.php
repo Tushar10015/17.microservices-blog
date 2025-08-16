@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class Posts extends Component
 {
@@ -16,6 +17,7 @@ class Posts extends Component
     public function mount()
     {
         $this->token = session('token'); // Token from login
+        Log::info('Posts component mounted', ['token' => $this->token]);
         $this->loadPosts();
     }
 
@@ -24,6 +26,7 @@ class Posts extends Component
         $response = Http::withToken($this->token)
             ->get(env('POST_SERVICE_URL') . '/api/posts');
 
+        Log::info('Posts response', ['response' => $response->json()]);
         $this->posts = $response->successful() ? $response->json() : [];
     }
 
@@ -36,14 +39,15 @@ class Posts extends Component
 
         if ($this->postId) {
             // Update post
-            Http::withToken($this->token)
+            $response = Http::withToken($this->token)
                 ->put(env('POST_SERVICE_URL') . '/api/posts/' . $this->postId, $data);
         } else {
             // Create new post
-            Http::withToken($this->token)
+            $response = Http::withToken($this->token)
                 ->post(env('POST_SERVICE_URL') . '/api/posts', $data);
         }
 
+        Log::info('Post saved/updated', ['response' => $response->json()]);
         $this->resetForm();
         $this->loadPosts();
     }
@@ -51,6 +55,7 @@ class Posts extends Component
     public function edit($id)
     {
         $post = collect($this->posts)->firstWhere('id', $id);
+        Log::info('Post edited', ['post' => $post]);
         if ($post) {
             $this->postId = $post['id'];
             $this->title = $post['title'];
@@ -60,9 +65,10 @@ class Posts extends Component
 
     public function delete($id)
     {
-        Http::withToken($this->token)
+        $response = Http::withToken($this->token)
             ->delete(env('POST_SERVICE_URL') . '/api/posts/' . $id);
 
+        Log::info('Post deleted', ['response' => $response->json()]);
         $this->loadPosts();
     }
 

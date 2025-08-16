@@ -38,7 +38,7 @@ class AuthRegister extends Component
             $errors = $response->json('errors') ?? ['email' => ['Registration failed']];
             foreach ($errors as $field => $messages) {
                 foreach ((array) $messages as $msg) {
-                    $this->addError($field, $msg);
+                    $this->message = $msg;
                 }
             }
         }
