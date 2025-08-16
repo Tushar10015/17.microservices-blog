@@ -19,6 +19,15 @@
         @yield('content')
     </div>
     @livewireScripts
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            Livewire.on('redirect', url => {
+                console.log(JSON.stringify(url, null, 2));
+                window.location.href = url.url;
+            })
+        });
+    </script>
 </body>
 
 </html>

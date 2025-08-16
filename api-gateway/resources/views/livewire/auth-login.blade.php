@@ -1,6 +1,5 @@
 <div class="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
     <form wire:submit.prevent="login">
-        @csrf
         <h2 class="text-xl font-bold mb-4">Login</h2>
 
         @if (!empty($message))

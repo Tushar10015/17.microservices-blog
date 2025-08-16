@@ -4,13 +4,14 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class AuthRegister extends Component
 {
-    public $name = '';
-    public $email = '';
-    public $password = '';
-    public $password_confirmation = '';
+    public $name = 'tushar';
+    public $email = 'tushar@example.com';
+    public $password = 'password';
+    public $password_confirmation = 'password';
     public $message = '';
 
     public function register()
@@ -22,23 +23,28 @@ class AuthRegister extends Component
             'password' => 'required|confirmed|min:8',
         ]);
 
-        $response = Http::post(env('AUTH_SERVICE_URL') . '/api/register', [
+        $response = Http::acceptJson()->post(env('AUTH_SERVICE_URL') . '/api/register', [
             'name' => $this->name,
             'email' => $this->email,
             'password' => $this->password,
             'password_confirmation' => $this->password_confirmation,
         ]);
 
+        Log::info('Register response: ' . $response->body());
+
+
         if ($response->successful()) {
             $this->reset(['name', 'email', 'password', 'password_confirmation']);
             $this->message = 'Registration successful! Please login.';
             session(['token' => $response->json('token')]);
-            return redirect('/posts');
+            // ✅ Instead of full redirect, dispatch event
+            $this->dispatch('redirect', url: '/posts');
         } else {
+            Log::error('Register failed for email: ' . $this->email);
             $errors = $response->json('errors') ?? ['email' => ['Registration failed']];
             foreach ($errors as $field => $messages) {
                 foreach ((array) $messages as $msg) {
-                    $this->message = $msg;
+                    $this->addError($field, $msg);
                 }
             }
         }

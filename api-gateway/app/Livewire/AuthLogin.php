@@ -21,7 +21,7 @@ class AuthLogin extends Component
 
         Log::info('Logging in with email: ' . $this->email);
 
-        $response = Http::post(env('AUTH_SERVICE_URL') . '/api/login', [
+        $response = Http::acceptJson()->post(env('AUTH_SERVICE_URL') . '/api/login', [
             'email' => $this->email,
             'password' => $this->password,
         ]);
@@ -29,7 +29,8 @@ class AuthLogin extends Component
         if ($response->successful()) {
             $this->message = 'Login successful!';
             session(['token' => $response->json('token')]);
-            return redirect('/posts');
+            // ✅ Instead of full redirect, dispatch event
+            $this->dispatch('redirect', url: '/posts');
         } else {
             $this->message = 'Invalid credentials';
             Log::error('Login failed for email: ' . $this->email);
