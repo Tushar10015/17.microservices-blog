@@ -35,6 +35,7 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Content</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Comments</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
             </thead>
@@ -44,6 +45,9 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $post['id'] }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $post['title'] }}</td>
                     <td class="px-6 py-4 text-sm text-gray-500">{{ Str::limit($post['content'], 50) }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        @livewire('comments', ['postId' => $post['id']], key($post['id']))
+                    </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                         <button wire:click="edit({{ $post['id'] }})"
                             class="text-yellow-600 hover:text-yellow-900 hover:bg-yellow-100 px-3 py-1 rounded-md transition duration-200">
