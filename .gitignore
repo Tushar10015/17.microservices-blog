@@ -28,3 +28,5 @@ docker-compose.override.yml
 *.sublime-workspace
 kubectl
 minikube-linux-amd64
+logs.txt
+
