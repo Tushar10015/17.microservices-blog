@@ -1,0 +1,80 @@
+# --- Persistent Volume Claim (PVC) ---
+# Defines a storage request that pods can use
+apiVersion: v1  # Kubernetes API version for PVC
+kind: PersistentVolumeClaim  # Type of Kubernetes resource
+metadata:
+  name: mysql-pv-claim  # Name of the PVC
+  namespace: blog-namespace  # Kubernetes namespace for this resource
+  labels:
+    app: mysql  # Label for selecting this PVC
+spec:
+  # Access mode defines how the volume can be mounted
+  accessModes:
+    - ReadWriteOnce  # Volume can be mounted as read-write by a single node
+  resources:
+    requests:
+      storage: 1Gi  # Requesting 1GB of storage space
+# --- MySQL Deployment ---
+# Defines how to deploy the MySQL database
+apiVersion: apps/v1  # Kubernetes API version for Deployment
+kind: Deployment  # Type of Kubernetes resource
+metadata:
+  name: mysql  # Name of the deployment
+  namespace: blog-namespace  # Kubernetes namespace
+  labels:
+    app: mysql  # Label for selecting this deployment
+spec:
+  # Label selector that identifies which pods are managed by this deployment
+  selector:
+    matchLabels:
+      app: mysql
+  # Deployment strategy for updates
+  strategy:
+    type: Recreate  # Terminates old pods before creating new ones (avoids version conflicts)
+  # Pod template that defines the containers and volumes
+  template:
+    metadata:
+      labels:
+        app: mysql  # Must match the selector's matchLabels
+    spec:  # Pod specification
+      # List of containers in the pod
+      containers:
+      - image: mysql:8.0  # MySQL 8.0 container image
+        name: mysql  # Name of the container
+        # Environment variables for MySQL configuration
+        env:
+        - name: MYSQL_ROOT_PASSWORD  # Root password for MySQL
+          value: root  # In production, use a secret for this
+        - name: MYSQL_DATABASE  # Database to create on startup
+          value: api_gateway  # Name of the database
+        # Ports that the container exposes
+        ports:
+        - containerPort: 3306  # Default MySQL port
+          name: mysql  # Name for this port definition
+        # Volume mounts for persistent storage
+        volumeMounts:
+        - name: mysql-persistent-storage  # Name of the volume to mount
+          mountPath: /var/lib/mysql  # Path inside the container where data is stored
+      # Volumes available to the pod
+      volumes:
+      - name: mysql-persistent-storage  # Name of the volume
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim  # References the PVC defined above
+# --- MySQL Service ---
+# Exposes the MySQL deployment as a network service
+apiVersion: v1  # Kubernetes API version for Service
+kind: Service  # Type of Kubernetes resource
+metadata:
+  name: mysql  # Name of the service
+  namespace: blog-namespace  # Kubernetes namespace
+  labels:
+    app: mysql  # Label for selecting this service
+spec:
+  # Port configuration for the service
+  ports:
+    - port: 3306  # Port exposed by the service
+  # Selector to find which pods to expose
+  selector:
+    app: mysql  # Must match the pod template's labels
+  # Service type and IP configuration
+  clusterIP: None  # Creates a headless service (no load-balancing, direct pod access)

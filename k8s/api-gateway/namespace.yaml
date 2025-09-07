@@ -1,0 +1,9 @@
+# --- Kubernetes Namespace Definition ---
+# Defines a logical boundary for resources in the Kubernetes cluster
+
+apiVersion: v1  # Core Kubernetes API version for Namespace
+kind: Namespace  # Type of Kubernetes resource
+metadata:
+  name: blog-namespace  # Unique name for the namespace
+  labels:
+    name: blog-namespace  # Label for selecting this namespace
